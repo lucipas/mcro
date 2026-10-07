@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      # Fills in binary/platform files that are not committed
+      # (gradle-wrapper.jar, launcher icons, ...). flutter create may also
+      # rewrite tracked files, so restore our versions afterwards — the
+      # files it added stay because they are untracked.
+      - name: Generate missing Android platform files
+        run: |
+          flutter create --platforms=android --project-name mcro --org dev.mcro .
+          git checkout -- . || true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze --no-fatal-infos
+
+      - name: Test
+        run: flutter test
+
+      - name: Build APK
+        run: flutter build apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcro-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
