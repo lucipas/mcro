@@ -35,13 +35,13 @@ class _FakePlatform extends PlatformServices {
   }) async {
     lastTimeout = timeout;
     if (!locationGranted) {
-      throw const PlatformException(
+      throw PlatformException(
         code: 'PERMISSION_DENIED',
         message: 'Location permission not granted.',
       );
     }
     if (locationThrows) {
-      throw const PlatformException(code: 'TIMEOUT', message: 'No fix within timeout.');
+      throw PlatformException(code: 'TIMEOUT', message: 'No fix within timeout.');
     }
     return location;
   }

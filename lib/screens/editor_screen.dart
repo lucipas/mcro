@@ -135,7 +135,7 @@ class _EditorScreenState extends State<EditorScreen>
           return;
         }
         await _save();
-        if (!mounted) {
+        if (!context.mounted) {
           return;
         }
         Navigator.of(context).pop();

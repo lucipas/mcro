@@ -26,7 +26,7 @@ class PlatformServices {
       <String, dynamic>{'timeoutMs': timeout.inMilliseconds},
     );
     if (location == null) {
-      throw const PlatformException(
+      throw PlatformException(
         code: 'POSITION_UNAVAILABLE',
         message: 'The platform returned no location.',
       );
