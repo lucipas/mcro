@@ -81,7 +81,9 @@ void main() {
   });
 
   testWidgets('app widget builds without errors', (tester) async {
-    await tester.pumpWidget(const McroApp());
+    // Injectable storage so the root widget never touches path_provider,
+    // which does not resolve inside a widget test.
+    await tester.pumpWidget(McroApp(storage: _FakeStorage()));
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
   });
